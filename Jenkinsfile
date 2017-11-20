@@ -29,6 +29,7 @@ node {
     }
   }
   stage('Deploy') {
+    sh 'docker pull java:8u111-jdk-alpine'
     sh 'docker ps -a --filter "name=gs-rest-service" | awk \'BEGIN{i=0}{i++;}END{if(i>=2)system("docker stop gs-rest-service")}\''
     sh 'docker run --rm --name gs-rest-service -p 80:80 -v /docker/jenkins/workspace/deploy_app:/usr/src/myapp -w /usr/src/myapp java:8u111-jdk-alpine java -jar complete/target/gs-rest-service-0.1.0.jar --server.port=80 &'
   }
